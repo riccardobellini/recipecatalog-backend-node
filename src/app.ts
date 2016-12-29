@@ -3,7 +3,12 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 
+import {Server} from "typescript-rest";
+
 import FirstRouter from './routes/firstRouter';
+
+// initialize routers
+new FirstRouter();
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -16,6 +21,7 @@ class App {
     this.express = express();
     this.middleware();
     this.routes();
+    Server.buildServices(this.express);
   }
 
   // Configure Express middleware.
@@ -38,7 +44,6 @@ class App {
       });
     });
     this.express.use('/', router);
-    this.express.use('/api/first/languages', FirstRouter);
   }
 
 }
