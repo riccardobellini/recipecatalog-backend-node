@@ -21,7 +21,8 @@
     "body-parser": "^1.15.2",
     "debug": "^2.5.2",
     "express": "^4.14.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "typescript-rest": "^0.2.7"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
