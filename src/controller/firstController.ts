@@ -1,3 +1,5 @@
+import DishTypeWorker from '../workers/dishType';
+
 interface Language {
   id: number;
   name: string;
@@ -11,6 +13,6 @@ const Languages : Array<Language> = [
 
 export default class FirstController {
 	public getAllLanguages() {
-		return Languages;
+		return new DishTypeWorker().readDishTypes();
 	}
 };

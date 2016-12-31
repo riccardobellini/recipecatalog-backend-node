@@ -3,6 +3,8 @@ import {Server, Path, GET, PathParam} from "typescript-rest";
 
 import FirstController from '../controller/firstController';
 
+// import DishTypeWorker from '../workers/dishType';
+
 @Path("/api/first/languages")
 export default class FirstRouter {
 
