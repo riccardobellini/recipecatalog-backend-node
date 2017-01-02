@@ -41,3 +41,18 @@ export function readDishTypes(parms: PaginationParams){
         return resp;
     });
 }
+
+
+export function readSingleDishType(id: number){
+    return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Id, id).first()
+    .then(function (row) {
+        if (row) {
+            let result : DishType = {
+                id: row[Tables.DishType.Columns.Id],
+                name: row[Tables.DishType.Columns.Name]
+            };
+            return result;
+        }
+    });
+}
+

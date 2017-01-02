@@ -4,6 +4,7 @@ module.exports = {
 
   development: {
     client: 'mysql',
+    debug: true,
     connection: {
       host : 'localhost',
       user : 'root',

@@ -20,7 +20,7 @@ describe('GET api/v1/dishTypes', () => {
     })
     .then(function() {
       return knex.seed.run();
-    });;
+    });
   });
 
   afterEach(() => {
@@ -29,25 +29,22 @@ describe('GET api/v1/dishTypes', () => {
 
   it('responds with JSON object with a result array', () => {
     return chai.request(app).get('/api/v1/dishTypes')
-      .then(res => {
-        expect(res.status).to.equal(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.an('object');
-        expect(res.body.results).to.be.an('array');
-        expect(res.body.results).to.have.length(3);
-      });
+    .then(res => {
+      expect(res.status).to.equal(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.an('object');
+      expect(res.body.results).to.be.an('array');
+      expect(res.body.results).to.have.length(3);
+    });
   });
 
   it('should include Antipasti', () => {
     return chai.request(app).get('/api/v1/dishTypes')
-      .then(res => {
-        let sought = res.body.results.find(dt => dt.name === 'Antipasti');
-        expect(sought).to.exist;
-        expect(sought).to.have.all.keys([
-          'id',
-          'name'
-        ]);
-      });
+    .then(res => {
+      let sought = res.body.results.find(dt => dt.name === 'Antipasti');
+      expect(sought).to.exist;
+      expect(sought).to.have.key('name');
+    });
   });
 
   it('should handle pagination', () => {
@@ -67,4 +64,37 @@ describe('GET api/v1/dishTypes', () => {
       })
   });
 
+
+});
+
+
+describe('GET api/v1/dishTypes/:id', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });;
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should return a single dish type', () => {
+    return chai.request(app).get('/api/v1/dishTypes/2')
+    .then(res => {
+      expect(res.status).to.equal(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.property('name');
+      expect(res.body.name).to.equal('Antipasti');
+    });
+  });
+
+
+  
 });
