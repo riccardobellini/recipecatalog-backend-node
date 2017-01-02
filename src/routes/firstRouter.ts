@@ -13,7 +13,11 @@ export default class FirstRouter {
    */
   @GET
   public getAll() {
-    return new FirstController().getAllLanguages();
+    return new FirstController().getAllLanguages()
+    .then(function(rows) {
+        console.log(rows);
+        return rows;
+    });
   }
 
 }

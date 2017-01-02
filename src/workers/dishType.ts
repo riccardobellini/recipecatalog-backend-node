@@ -1,10 +1,9 @@
 import * as dishTypeDb from '../modules/database/dishType';
 
+import * as Knex from 'knex';
+
 export default class DishTypeWorker {
-    readDishTypes() {
-        dishTypeDb.readDishTypes()
-        .then((rows) => {
-            console.log(rows[0]);
-        })
+    readDishTypes(): Knex.QueryBuilder {
+        return dishTypeDb.readDishTypes();
     }
 }
