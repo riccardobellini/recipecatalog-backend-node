@@ -15,7 +15,6 @@ export default class FirstRouter {
   public getAll() {
     return new FirstController().getAllLanguages()
     .then(function(rows) {
-        console.log(rows);
         return rows;
     });
   }
