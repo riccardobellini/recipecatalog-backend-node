@@ -1,9 +1,11 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import {Server, Path, GET, POST, DELETE, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
+import {Server, Path, GET, POST, DELETE, PUT, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
 
 import DishTypeController from '../controller/dishTypeController';
 
 import {PaginationParams} from '../models/paginationParams';
+
+import {UnprocessableEntityError} from '../errors/http/unprocessableEntity';
 
 
 @Path("/api/v1/dishTypes")
@@ -45,6 +47,15 @@ export default class DishTypeRouter {
   @DELETE
   public remove(@PathParam('id') id: number) {
     return new DishTypeController().removeDishType(id);
+  }
+
+  @Path(":id")
+  @PUT
+  public change(@PathParam('id') id: number, data: any) {
+    if (data && data.id) {
+      throw new UnprocessableEntityError();
+    }
+    return new DishTypeController().changeDishType(id, data);
   }
 
 }

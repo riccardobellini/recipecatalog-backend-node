@@ -17,4 +17,8 @@ export default class DishTypesController {
     public removeDishType(id) {
         return new DishTypeWorker().removeDishType(id);
     }
+
+    public changeDishType(id: number, obj: any) {
+        return new DishTypeWorker().changeDishType(id, obj);
+    }
 };

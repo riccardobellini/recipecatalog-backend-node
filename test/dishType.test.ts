@@ -199,3 +199,45 @@ describe('DELETE api/v1/dishTypes/:id', () => {
 
 });
 
+
+describe('PUT api/v1/dishTypes/:id', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should update the entry successfully', () => {
+    return chai.request(app).put('/api/v1/dishTypes/2')
+    .send({name: 'Antipasto'})
+    .then(res => {
+      expect(res.status).to.equal(204);
+      return chai.request(app).get('/api/v1/dishTypes/2');
+    })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal('Antipasto');
+    });
+  });
+
+  it('should not update if given an id field', () => {
+    return chai.request(app).put('/api/v1/dishTypes/2')
+    .send({id: 777, name: 'Antipasto'})
+    .then(res => {
+      expect(res.status).to.equal(422);
+    })
+    .catch((res) => {
+      expect(res.status).to.equal(422);
+    });
+  });
+
+});

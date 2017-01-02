@@ -75,8 +75,17 @@ export function insertDishType(dt: any){
 
 export function deleteDishType(id: number){
     return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Id, id).del()
-    .then((row) => {
-        console.log(row);
-    });
+    .then(() => {});
+}
+
+export function updateDishType(id: number, obj: any){
+    if (id && obj) {
+        let updates = {};
+        if (obj.name) {
+            updates[Tables.DishType.Columns.Name] = obj.name;
+        }
+        return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Id, id).update(updates)
+        .then(() => {});
+    }
 }
 
