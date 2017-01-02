@@ -1,5 +1,5 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import {Server, Path, GET, PathParam, QueryParam, Errors} from "typescript-rest";
+import {Server, Path, GET, POST, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
 
 import DishTypeController from '../controller/dishTypeController';
 
@@ -30,6 +30,18 @@ export default class DishTypeRouter {
         throw new Errors.NotFoundError();
       }
       return row;
+    });
+  }
+
+  @POST
+  public create(dishType: any) {
+    return new DishTypeController().createDishType(dishType)
+    .then(function(genId) {
+      return new Return.NewResource('/api/v1/dishTypes/' + genId);
+    })
+    .catch(function (err) {
+      console.log(err);
+      throw new Errors.ConflictError('An entry with the specified name already exists');
     });
   }
 

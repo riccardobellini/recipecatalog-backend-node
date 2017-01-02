@@ -56,3 +56,20 @@ export function readSingleDishType(id: number){
     });
 }
 
+export function insertDishType(dt: any){
+    if (dt && dt.name) {
+        return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Name, dt.name).first()
+        .then((row) => {
+            if (row) {
+                throw new Error('Dish type entry ' + dt.name + ' already exists!');
+            }
+            let values = {};
+            values[Tables.DishType.Columns.Name] = dt.name;
+            return db(Tables.DishType.TblName).insert(values);
+        })
+        .then(function (rowId) {
+            return rowId;
+        });
+    }
+}
+

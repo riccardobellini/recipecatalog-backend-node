@@ -15,4 +15,8 @@ export default class DishTypeWorker {
     readSingleDishType(id : number) {
         return dishTypeDb.readSingleDishType(id);
     }
+
+    createDishType(dt : any) {
+        return dishTypeDb.insertDishType(dt);
+    }
 }

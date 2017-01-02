@@ -9,4 +9,8 @@ export default class DishTypesController {
     public getSingleDishType(id) {
 		return new DishTypeWorker().readSingleDishType(id);
 	}
+
+    public createDishType(dt) {
+        return new DishTypeWorker().createDishType(dt);
+    }
 };

@@ -95,6 +95,49 @@ describe('GET api/v1/dishTypes/:id', () => {
     });
   });
 
-
-  
 });
+
+
+
+describe('POST api/v1/dishTypes', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should respond successfully', () => {
+    return chai.request(app).post('/api/v1/dishTypes')
+    .send({name: 'Aperitivi'})
+    .then(res => {
+      expect(res.status).to.equal(201);
+      expect(res).to.have.header('Location', /^\/api\/v1\/dishTypes\/\d+/);
+    });
+  });
+
+  it('should not allow insertion of a duplicate entry', () => {
+    return chai.request(app).post('/api/v1/dishTypes')
+    .send({name: 'Aperitivi'})
+    .then(res => {
+      return chai.request(app).post('/api/v1/dishTypes')
+      .send({name: 'Aperitivi'});
+    })
+    .then(res => {
+      expect(res.status).to.equal(409);
+    })
+    .catch((err) => {
+      expect(err.status).to.equal(409);
+    });
+  });
+
+});
+
