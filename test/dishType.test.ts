@@ -1,6 +1,10 @@
+process.env.NODE_ENV = 'test';
+
 import * as mocha from 'mocha';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+
+var knex = require('../db/knex');
 
 import app from '../src/app';
 
@@ -8,6 +12,20 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 
 describe('GET api/v1/dishTypes', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });;
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
 
   it('responds with JSON object with a result array', () => {
     return chai.request(app).get('/api/v1/dishTypes')
