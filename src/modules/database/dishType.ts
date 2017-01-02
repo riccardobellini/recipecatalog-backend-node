@@ -17,7 +17,7 @@ export function readDishTypes(parms: PaginationParams){
         results : []
     };
     return db(Tables.DishType.TblName).count('* as TOTAL').first()
-    .then(function (result) {
+    .then((result) => {
         let tot = result['TOTAL'];
         let pages = Math.ceil(tot / parms.limit);
         let more = parms.offset + parms.limit < tot;
@@ -29,7 +29,7 @@ export function readDishTypes(parms: PaginationParams){
         };
         return db.select().from(Tables.DishType.TblName).orderBy(Tables.DishType.Columns.Name, 'asc').limit(parms.limit).offset(parms.offset);
     })
-    .then(function (rows) {
+    .then((rows) => {
         let result : Array<DishType> = [];
         for (let row of rows) {
             result.push({
@@ -45,7 +45,7 @@ export function readDishTypes(parms: PaginationParams){
 
 export function readSingleDishType(id: number){
     return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Id, id).first()
-    .then(function (row) {
+    .then((row) => {
         if (row) {
             let result : DishType = {
                 id: row[Tables.DishType.Columns.Id],
@@ -67,9 +67,16 @@ export function insertDishType(dt: any){
             values[Tables.DishType.Columns.Name] = dt.name;
             return db(Tables.DishType.TblName).insert(values);
         })
-        .then(function (rowId) {
+        .then((rowId) => {
             return rowId;
         });
     }
+}
+
+export function deleteDishType(id: number){
+    return db(Tables.DishType.TblName).where(Tables.DishType.Columns.Id, id).del()
+    .then((row) => {
+        console.log(row);
+    });
 }
 

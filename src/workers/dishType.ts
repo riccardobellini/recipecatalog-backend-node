@@ -19,4 +19,8 @@ export default class DishTypeWorker {
     createDishType(dt : any) {
         return dishTypeDb.insertDishType(dt);
     }
+
+    removeDishType(id: number) {
+        return dishTypeDb.deleteDishType(id);
+    }
 }

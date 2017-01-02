@@ -139,5 +139,63 @@ describe('POST api/v1/dishTypes', () => {
     });
   });
 
+  it('should actually create the entry', () => {
+    return chai.request(app).post('/api/v1/dishTypes')
+    .send({name: 'Aperitivi'})
+    .then(res => {
+      return chai.request(app).get(res.headers.location);
+    })
+    .then(res => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal('Aperitivi');
+    });
+  });
+
+});
+
+
+describe('DELETE api/v1/dishTypes/:id', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should delete the entry successfully', () => {
+    return chai.request(app).delete('/api/v1/dishTypes/2')
+    .then(res => {
+      expect(res.status).to.equal(204);
+      return chai.request(app).get('/api/v1/dishTypes/2');
+    })
+    .then((res) => {
+      expect(res.status).to.equal(404);
+    })
+    .catch((res) => {
+      expect(res.status).to.equal(404);
+    });
+  });
+
+  it('should delete just the specified entry', () => {
+    return chai.request(app).delete('/api/v1/dishTypes/2')
+    .then(res => {
+      expect(res.status).to.equal(204);
+      return chai.request(app).get('/api/v1/dishTypes');
+    })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res).to.be.json;
+      expect(res.body.results).to.have.length(2);
+    })
+  });
+
 });
 

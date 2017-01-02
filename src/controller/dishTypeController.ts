@@ -13,4 +13,8 @@ export default class DishTypesController {
     public createDishType(dt) {
         return new DishTypeWorker().createDishType(dt);
     }
+
+    public removeDishType(id) {
+        return new DishTypeWorker().removeDishType(id);
+    }
 };
