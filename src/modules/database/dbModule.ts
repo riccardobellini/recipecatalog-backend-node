@@ -10,7 +10,7 @@ export default class DbModule {
 			console.log("Creating database");
 			this.db = knex({
 				client: 'mysql',
-				debug: true,
+				// debug: true,
 				connection: {
 					host : Connection.Host,
 					user : Connection.User,

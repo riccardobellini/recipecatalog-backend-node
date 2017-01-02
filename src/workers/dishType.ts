@@ -1,11 +1,14 @@
 import * as dishTypeDb from '../modules/database/dishType';
 import {DishType} from '../models/dishType';
-
+import {PaginationParams, Defaults} from '../models/paginationParams';
 
 import * as Knex from 'knex';
 
 export default class DishTypeWorker {
-    readDishTypes(): Promise<Array<DishType>> {
-        return dishTypeDb.readDishTypes();
+    readDishTypes(parms ?: PaginationParams) {
+        if (!parms) {
+            var parms = new PaginationParams();
+        }
+        return dishTypeDb.readDishTypes(parms);
     }
 }
