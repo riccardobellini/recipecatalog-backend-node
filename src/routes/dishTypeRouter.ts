@@ -1,19 +1,19 @@
 import {Router, Request, Response, NextFunction} from 'express';
 import {Server, Path, GET, PathParam} from "typescript-rest";
 
-import FirstController from '../controller/firstController';
+import DishTypeController from '../controller/dishTypeController';
 
 // import DishTypeWorker from '../workers/dishType';
 
-@Path("/api/first/languages")
-export default class FirstRouter {
+@Path("/api/v1/dishTypes")
+export default class DishTypeRouter {
 
   /**
    * GET all Languages.
    */
   @GET
   public getAll() {
-    return new FirstController().getAllLanguages()
+    return new DishTypeController().getAllDishTypes()
     .then(function(rows) {
         return rows;
     });

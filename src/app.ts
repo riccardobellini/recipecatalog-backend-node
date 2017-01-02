@@ -6,10 +6,10 @@ import * as bodyParser from 'body-parser';
 import {Server} from "typescript-rest";
 
 
-import FirstRouter from './routes/firstRouter';
+import DishTypeRouter from './routes/dishTypeRouter';
 
 // initialize routers
-new FirstRouter();
+new DishTypeRouter();
 
 // Creates and configures an ExpressJS web server.
 class App {
