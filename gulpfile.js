@@ -21,6 +21,6 @@ gulp.task("start", ['watch'], function(cb) {
   nodemon({
     script: 'dist/server.js'
   , ext: 'js html'
-  , env: { 'NODE_ENV': 'development' }
+  // , env: { 'NODE_ENV': 'development' }
   })
 });

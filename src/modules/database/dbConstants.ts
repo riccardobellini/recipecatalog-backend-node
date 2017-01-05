@@ -9,7 +9,7 @@ export const Connection = {
 		Host : 'localhost',
 		User : 'root',
 		Password : 'root',
-		DbName : 'catalogo_ricette'
+		DbName : 'catalogo_ricette_dev'
 	},
 	production : {
 		Host : 'localhost',
@@ -22,6 +22,20 @@ export const Connection = {
 export const Tables = {
 	DishType : {
 		TblName: 'CATEGORIA',
+		Columns : {
+			Id: 'ID',
+			Name : 'NOME'
+		}
+	},
+	Book : {
+		TblName: 'LIBRO',
+		Columns : {
+			Id: 'ID',
+			Title : 'TITOLO'
+		}
+	},
+	Ingredient : {
+		TblName: 'INGREDIENTE',
 		Columns : {
 			Id: 'ID',
 			Name : 'NOME'

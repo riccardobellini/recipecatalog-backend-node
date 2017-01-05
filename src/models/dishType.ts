@@ -1,4 +1,4 @@
-// dish type module
+// dish type model
 
 export interface DishType {
 	id: number;

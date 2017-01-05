@@ -2,9 +2,10 @@ import * as knex from 'knex';
 
 import {Connection} from './dbConstants';
 
+console.log('Running in environment: ' + process.env.NODE_ENV);
 var env = process.env.NODE_ENV || 'development';
 
-export default class DbModule {
+export class DbModule {
 	db: knex;
 
 	constructor() {
@@ -24,3 +25,5 @@ export default class DbModule {
 	}
 
 };
+
+export const db = new DbModule().db;
