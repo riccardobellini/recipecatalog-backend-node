@@ -33,5 +33,12 @@ export const Tables = {
 			Id: 'ID',
 			Title : 'TITOLO'
 		}
+	},
+	Ingredient : {
+		TblName: 'INGREDIENTE',
+		Columns : {
+			Id: 'ID',
+			Name : 'NOME'
+		}
 	}
 };
