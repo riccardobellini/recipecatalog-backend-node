@@ -8,10 +8,12 @@ import {Server} from "typescript-rest";
 
 import DishTypeRouter from './routes/dishTypeRouter';
 import BookRouter from './routes/bookRouter';
+import IngredientRouter from './routes/ingredientRouter';
 
 // initialize routers
 new DishTypeRouter();
 new BookRouter();
+new IngredientRouter();
 
 // Creates and configures an ExpressJS web server.
 class App {
