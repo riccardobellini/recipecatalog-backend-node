@@ -1,5 +1,5 @@
 // dish type module (read-write operations on db)
-import DbModule from './dbModule';
+import {DbModule, db} from './dbModule';
 import {Tables} from './dbConstants';
 import {DishType} from '../../models/dishType';
 
@@ -8,7 +8,7 @@ import {PaginationParams} from '../../models/paginationParams';
 
 import * as Knex from 'knex';
 
-var db = new DbModule().db;
+// var db = new DbModule().db;
 
 
 export function readDishTypes(parms: PaginationParams){

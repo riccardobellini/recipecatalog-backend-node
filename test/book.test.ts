@@ -91,7 +91,7 @@ describe('GET api/v1/books/:id', () => {
       expect(res).to.be.json;
       expect(res.body).to.be.an('object');
       expect(res.body).to.have.property('title');
-      expect(res.body.name).to.equal('Sale & Pepe');
+      expect(res.body.title).to.equal('Sale & Pepe');
     });
   });
 

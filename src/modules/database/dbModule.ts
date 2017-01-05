@@ -4,7 +4,7 @@ import {Connection} from './dbConstants';
 
 var env = process.env.NODE_ENV || 'development';
 
-export default class DbModule {
+export class DbModule {
 	db: knex;
 
 	constructor() {
@@ -24,3 +24,5 @@ export default class DbModule {
 	}
 
 };
+
+export const db = new DbModule().db;
