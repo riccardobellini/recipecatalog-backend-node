@@ -43,7 +43,7 @@ describe('GET api/v1/dishTypes', () => {
     .then(res => {
       let sought = res.body.results.find(dt => dt.name === 'Antipasti');
       expect(sought).to.exist;
-      expect(sought).to.have.key('name');
+      expect(sought).to.have.all.keys(['id', 'name']);
     });
   });
 

@@ -43,7 +43,7 @@ describe('GET api/v1/books', () => {
     .then(res => {
       let sought = res.body.results.find(dt => dt.title === 'Sale & Pepe');
       expect(sought).to.exist;
-      expect(sought).to.have.key('title');
+      expect(sought).to.have.all.keys(['id', 'title']);
     });
   });
 
