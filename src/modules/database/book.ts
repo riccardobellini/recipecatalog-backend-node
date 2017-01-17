@@ -76,6 +76,11 @@ export function deleteBook(id: number){
     .then(() => {});
 }
 
+export function deleteBooks(ids: Array<number>){
+    return db(Tables.Book.TblName).whereIn(Tables.Book.Columns.Id, ids).del()
+    .then(() => {});
+}
+
 export function updateBook(id: number, obj: any){
     if (id && obj) {
         let updates = {};

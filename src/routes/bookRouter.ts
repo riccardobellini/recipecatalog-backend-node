@@ -23,6 +23,19 @@ bookRouter.route('/')
   .catch((err) => {
     res.status(409).send(`An entry with title '${req.body.title}' already exists`);
   })
+})
+.delete((req, res) => {
+  if (!req.query.id || req.query.id.length === 0) {
+    res.sendStatus(400);
+    return;
+  }
+  var idArr = req.query.id.split(',');
+  if (idArr.length === 0) {
+    res.sendStatus(400);
+    return;
+  }
+  new BooksController().removeBooks(idArr)
+  .then(() => res.sendStatus(204));
 });
 
 bookRouter.route('/:id')

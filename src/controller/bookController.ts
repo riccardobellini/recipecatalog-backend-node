@@ -18,6 +18,10 @@ export default class BooksController {
         return new BookWorker().removeBook(id);
     }
 
+    public removeBooks(ids) {
+        return new BookWorker().removeBooks(ids);
+    }
+
     public changeBook(id: number, obj: any) {
         return new BookWorker().changeBook(id, obj);
     }

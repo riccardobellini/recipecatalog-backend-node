@@ -24,6 +24,10 @@ export default class BookWorker {
         return bookDb.deleteBook(id);
     }
 
+    removeBooks(ids: Array<number>) {
+        return bookDb.deleteBooks(ids);
+    }
+
     changeBook(id: number, obj: any) {
         return bookDb.updateBook(id, obj);
     }
