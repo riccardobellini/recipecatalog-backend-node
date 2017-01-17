@@ -4,8 +4,6 @@ import BooksController from '../controller/bookController';
 
 import {PaginationParams} from '../models/paginationParams';
 
-import {UnprocessableEntityError} from '../errors/http/unprocessableEntity';
-
 
 export var bookRouter : Router = Router();
 
