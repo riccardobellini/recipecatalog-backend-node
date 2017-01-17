@@ -176,7 +176,7 @@ describe('DELETE api/v1/ingredients', () => {
       return chai.request(app).get('/api/v1/ingredients');
     })
     .then((res) => {
-      let sought = res.body.results.find(bk => bk.id === 2 || bk.id === 3);
+      let sought = res.body.results.find(ing => ing.id === 2 || ing.id === 3);
       expect(sought).to.not.exist;
     });
   });
