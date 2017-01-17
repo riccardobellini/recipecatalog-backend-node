@@ -18,7 +18,6 @@ export function readIngredients(parms: PaginationParams){
     };
     return db(Tables.Ingredient.TblName).count('* as TOTAL').first()
     .then((result) => {
-        console.log(result);
         let tot = result['TOTAL'];
         let pages = Math.ceil(tot / parms.limit);
         let more = parms.offset + parms.limit < tot;

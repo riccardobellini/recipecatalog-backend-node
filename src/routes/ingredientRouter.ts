@@ -1,62 +1,50 @@
-import {Router, Request, Response, NextFunction} from 'express';
-import {Server, Path, GET, POST, DELETE, PUT, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
+import {Router} from 'express';
 
 import IngredientController from '../controller/ingredientController';
 
 import {PaginationParams} from '../models/paginationParams';
 
-import {UnprocessableEntityError} from '../errors/http/unprocessableEntity';
 
+export var ingredientRouter : Router = Router();
 
-@Path("/api/v1/ingredients")
-export default class IngredientRouter {
+ingredientRouter.route('/')
+.get((req, res) => {
+  var parms = new PaginationParams(+req.query.offset, +req.query.limit);
+  new IngredientController().getAllIngredients(parms)
+  .then(function(rows) {
+      res.json(rows);
+  });
+})
+.post((req, res) => {
+  new IngredientController().createIngredient(req.body)
+  .then(function(genId) {
+    res.status(201).location('/api/v1/ingredients/' + genId).send();
+  })
+  .catch((err) => {
+    res.status(409).send(`An entry with name '${req.body.name}' already exists`);
+  })
+});
 
-  @GET
-  public getAll(@QueryParam('limit') lim: number, @QueryParam('offset') offs: number) {
-    var parms = new PaginationParams(offs, lim);
-    console.log('Here I am');
-    return new IngredientController().getAllIngredients(parms)
-    .then(function(rows) {
-        return rows;
-    });
-  }
-
-  @Path(":id")
-  @GET
-  public getSingle(@PathParam('id') id: number) {
-    return new IngredientController().getSingleIngredient(id)
-    .then(function(row) {
-      if (!row) {
-        throw new Errors.NotFoundError();
-      }
-      return row;
-    });
-  }
-
-  @POST
-  public create(dishType: any) {
-    return new IngredientController().createIngredient(dishType)
-    .then(function(genId) {
-      return new Return.NewResource('/api/v1/ingredients/' + genId);
-    })
-    .catch(function (err) {
-      throw new Errors.ConflictError('An entry with the specified name already exists');
-    });
-  }
-
-  @Path(":id")
-  @DELETE
-  public remove(@PathParam('id') id: number) {
-    return new IngredientController().removeIngredient(id);
-  }
-
-  @Path(":id")
-  @PUT
-  public change(@PathParam('id') id: number, data: any) {
-    if (data && data.id) {
-      throw new UnprocessableEntityError();
+ingredientRouter.route('/:id')
+.get((req, res) => {
+  new IngredientController().getSingleIngredient(+req.params.id)
+  .then(function(row) {
+    if (!row) {
+      res.sendStatus(404);
+    } else {
+      res.json(row);
     }
-    return new IngredientController().changeIngredient(id, data);
+  });
+})
+.put((req, res) => {
+  if (req.body.id) {
+    res.sendStatus(422);
+  } else {
+    new IngredientController().changeIngredient(req.params.id, req.body)
+    .then(() => res.sendStatus(204));
   }
-
-}
+})
+.delete((req, res) => {
+  new IngredientController().removeIngredient(req.params.id)
+  .then(() => res.sendStatus(204));
+});
