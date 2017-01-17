@@ -1,61 +1,50 @@
-import {Router, Request, Response, NextFunction} from 'express';
-import {Server, Path, GET, POST, DELETE, PUT, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
+import {Router} from 'express';
 
 import DishTypeController from '../controller/dishTypeController';
 
 import {PaginationParams} from '../models/paginationParams';
 
-import {UnprocessableEntityError} from '../errors/http/unprocessableEntity';
 
+export var dishTypeRouter : Router = Router();
 
-@Path("/api/v1/dishTypes")
-export default class DishTypeRouter {
+dishTypeRouter.route('/')
+.get((req, res) => {
+  var parms = new PaginationParams(+req.query.offset, +req.query.limit);
+  new DishTypeController().getAllDishTypes(parms)
+  .then(function(rows) {
+      res.json(rows);
+  });
+})
+.post((req, res) => {
+  new DishTypeController().createDishType(req.body)
+  .then(function(genId) {
+    res.status(201).location('/api/v1/dishTypes/' + genId).send();
+  })
+  .catch((err) => {
+    res.status(409).send(`An entry with name '${req.body.name}' already exists`);
+  })
+});
 
-  @GET
-  public getAll(@QueryParam('limit') lim: number, @QueryParam('offset') offs: number) {
-    var parms = new PaginationParams(offs, lim);
-    return new DishTypeController().getAllDishTypes(parms)
-    .then(function(rows) {
-        return rows;
-    });
-  }
-
-  @Path(":id")
-  @GET
-  public getSingle(@PathParam('id') id: number) {
-    return new DishTypeController().getSingleDishType(id)
-    .then(function(row) {
-      if (!row) {
-        throw new Errors.NotFoundError();
-      }
-      return row;
-    });
-  }
-
-  @POST
-  public create(dishType: any) {
-    return new DishTypeController().createDishType(dishType)
-    .then(function(genId) {
-      return new Return.NewResource('/api/v1/dishTypes/' + genId);
-    })
-    .catch(function (err) {
-      throw new Errors.ConflictError('An entry with the specified name already exists');
-    });
-  }
-
-  @Path(":id")
-  @DELETE
-  public remove(@PathParam('id') id: number) {
-    return new DishTypeController().removeDishType(id);
-  }
-
-  @Path(":id")
-  @PUT
-  public change(@PathParam('id') id: number, data: any) {
-    if (data && data.id) {
-      throw new UnprocessableEntityError();
+dishTypeRouter.route('/:id')
+.get((req, res) => {
+  new DishTypeController().getSingleDishType(+req.params.id)
+  .then(function(row) {
+    if (!row) {
+      res.sendStatus(404);
+    } else {
+      res.json(row);
     }
-    return new DishTypeController().changeDishType(id, data);
+  });
+})
+.put((req, res) => {
+  if (req.body.id) {
+    res.sendStatus(422);
+  } else {
+    new DishTypeController().changeDishType(req.params.id, req.body)
+    .then(() => res.sendStatus(204));
   }
-
-}
+})
+.delete((req, res) => {
+  new DishTypeController().removeDishType(req.params.id)
+  .then(() => res.sendStatus(204));
+});
