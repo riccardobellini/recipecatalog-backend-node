@@ -23,7 +23,22 @@ dishTypeRouter.route('/')
   .catch((err) => {
     res.status(409).send(`An entry with name '${req.body.name}' already exists`);
   })
+})
+.delete((req, res) => {
+  if (!req.query.id || req.query.id.length === 0) {
+    res.sendStatus(400);
+    return;
+  }
+  var idArr = req.query.id.split(',');
+  if (idArr.length === 0) {
+    res.sendStatus(400);
+    return;
+  }
+  var ids = idArr.map((el) => parseInt(el));
+  new DishTypeController().removeDishTypes(ids)
+  .then(() => res.sendStatus(204));
 });
+
 
 dishTypeRouter.route('/:id')
 .get((req, res) => {

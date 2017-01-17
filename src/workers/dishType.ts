@@ -24,6 +24,10 @@ export default class DishTypeWorker {
         return dishTypeDb.deleteDishType(id);
     }
 
+    removeDishTypes(ids: Array<number>) {
+        return dishTypeDb.deleteDishTypes(ids);
+    }
+
     changeDishType(id: number, obj: any) {
         return dishTypeDb.updateDishType(id, obj);
     }

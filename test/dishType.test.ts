@@ -153,6 +153,37 @@ describe('POST api/v1/dishTypes', () => {
 
 });
 
+describe('DELETE api/v1/dishTypes', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should delete the entries successfully', () => {
+    return chai.request(app).delete('/api/v1/dishTypes?id=2,3')
+    .then(res => {
+      expect(res.status).to.equal(204);
+      return chai.request(app).get('/api/v1/dishTypes');
+    })
+    .then((res) => {
+      let sought = res.body.results.find(dt => dt.id === 2 || dt.id === 3);
+      expect(sought).to.not.exist;
+    });
+  });
+
+});
+
+
 
 describe('DELETE api/v1/dishTypes/:id', () => {
 

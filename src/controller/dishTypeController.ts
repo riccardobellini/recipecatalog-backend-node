@@ -18,6 +18,10 @@ export default class DishTypesController {
         return new DishTypeWorker().removeDishType(id);
     }
 
+    public removeDishTypes(ids) {
+        return new DishTypeWorker().removeDishTypes(ids);
+    }
+
     public changeDishType(id: number, obj: any) {
         return new DishTypeWorker().changeDishType(id, obj);
     }

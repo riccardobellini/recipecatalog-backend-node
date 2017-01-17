@@ -78,6 +78,11 @@ export function deleteDishType(id: number){
     .then(() => {});
 }
 
+export function deleteDishTypes(ids: Array<number>){
+    return db(Tables.DishType.TblName).whereIn(Tables.DishType.Columns.Id, ids).del()
+    .then(() => {});
+}
+
 export function updateDishType(id: number, obj: any){
     if (id && obj) {
         let updates = {};
