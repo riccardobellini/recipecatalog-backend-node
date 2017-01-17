@@ -24,6 +24,10 @@ export default class IngredientWorker {
         return ingredientDb.deleteIngredient(id);
     }
 
+    removeIngredients(ids: Array<number>) {
+        return ingredientDb.deleteIngredients(ids);
+    }
+
     changeIngredient(id: number, obj: any) {
         return ingredientDb.updateIngredient(id, obj);
     }

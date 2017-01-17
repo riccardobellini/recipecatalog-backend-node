@@ -18,6 +18,10 @@ export default class IngredientsController {
         return new IngredientWorker().removeIngredient(id);
     }
 
+    public removeIngredients(ids) {
+        return new IngredientWorker().removeIngredients(ids);
+    }
+
     public changeIngredient(id: number, obj: any) {
         return new IngredientWorker().changeIngredient(id, obj);
     }

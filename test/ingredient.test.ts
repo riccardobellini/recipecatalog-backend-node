@@ -153,6 +153,37 @@ describe('POST api/v1/ingredients', () => {
 
 });
 
+describe('DELETE api/v1/ingredients', () => {
+
+  beforeEach(() => {
+    return knex.migrate.rollback()
+    .then(function() {
+      return knex.migrate.latest();
+    })
+    .then(function() {
+      return knex.seed.run();
+    });
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  it('should delete the entries successfully', () => {
+    return chai.request(app).delete('/api/v1/ingredients?id=2,3')
+    .then(res => {
+      expect(res.status).to.equal(204);
+      return chai.request(app).get('/api/v1/ingredients');
+    })
+    .then((res) => {
+      let sought = res.body.results.find(bk => bk.id === 2 || bk.id === 3);
+      expect(sought).to.not.exist;
+    });
+  });
+
+});
+
+
 
 describe('DELETE api/v1/ingredients/:id', () => {
 
