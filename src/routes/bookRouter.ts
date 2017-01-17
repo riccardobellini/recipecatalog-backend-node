@@ -34,7 +34,8 @@ bookRouter.route('/')
     res.sendStatus(400);
     return;
   }
-  new BooksController().removeBooks(idArr)
+  var ids = idArr.map((el) => parseInt(el));
+  new BooksController().removeBooks(ids)
   .then(() => res.sendStatus(204));
 });
 
