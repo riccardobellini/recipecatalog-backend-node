@@ -7,12 +7,11 @@ import {Server} from "typescript-rest";
 
 
 import DishTypeRouter from './routes/dishTypeRouter';
-import BookRouter from './routes/bookRouter';
+import {bookRouter} from './routes/bookRouter';
 import IngredientRouter from './routes/ingredientRouter';
 
 // initialize routers
 new DishTypeRouter();
-new BookRouter();
 new IngredientRouter();
 
 // Creates and configures an ExpressJS web server.
@@ -54,6 +53,8 @@ class App {
       });
     });
     this.express.use('/', router);
+
+    this.express.use('/api/v1/books', bookRouter);
   }
 
 }

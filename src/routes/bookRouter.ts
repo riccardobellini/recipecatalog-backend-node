@@ -1,5 +1,4 @@
-import {Router, Request, Response, NextFunction} from 'express';
-import {Server, Path, GET, POST, DELETE, PUT, PathParam, QueryParam, Errors, Return, ServiceContext} from "typescript-rest";
+import {Router} from 'express';
 
 import BooksController from '../controller/bookController';
 
@@ -8,54 +7,46 @@ import {PaginationParams} from '../models/paginationParams';
 import {UnprocessableEntityError} from '../errors/http/unprocessableEntity';
 
 
-@Path("/api/v1/books")
-export default class BookRouter {
+export var bookRouter : Router = Router();
 
-  @GET
-  public getAll(@QueryParam('limit') lim: number, @QueryParam('offset') offs: number) {
-    var parms = new PaginationParams(offs, lim);
-    return new BooksController().getAllBooks(parms)
-    .then(function(rows) {
-        return rows;
-    });
-  }
+bookRouter.route('/')
+.get((req, res) => {
+  var parms = new PaginationParams(+req.query.offset, +req.query.limit);
+  new BooksController().getAllBooks(parms)
+  .then(function(rows) {
+      res.json(rows);
+  });
+})
+.post((req, res) => {
+  new BooksController().createBook(req.body)
+  .then(function(genId) {
+    res.status(201).location('/api/v1/books/' + genId).send();
+  })
+  .catch((err) => {
+    res.status(409).send(`An entry with title '${req.body.title}' already exists`);
+  })
+});
 
-  @Path(":id")
-  @GET
-  public getSingle(@PathParam('id') id: number) {
-    return new BooksController().getSingleBook(id)
-    .then(function(row) {
-      if (!row) {
-        throw new Errors.NotFoundError();
-      }
-      return row;
-    });
-  }
-
-  @POST
-  public create(book: any) {
-    return new BooksController().createBook(book)
-    .then(function(genId) {
-      return new Return.NewResource('/api/v1/books/' + genId);
-    })
-    .catch(function (err) {
-      throw new Errors.ConflictError('An entry with the specified name already exists');
-    });
-  }
-
-  @Path(":id")
-  @DELETE
-  public remove(@PathParam('id') id: number) {
-    return new BooksController().removeBook(id);
-  }
-
-  @Path(":id")
-  @PUT
-  public change(@PathParam('id') id: number, data: any) {
-    if (data && data.id) {
-      throw new UnprocessableEntityError();
+bookRouter.route('/:id')
+.get((req, res) => {
+  new BooksController().getSingleBook(+req.params.id)
+  .then(function(row) {
+    if (!row) {
+      res.sendStatus(404);
+    } else {
+      res.json(row);
     }
-    return new BooksController().changeBook(id, data);
+  });
+})
+.put((req, res) => {
+  if (req.body.id) {
+    res.sendStatus(422);
+  } else {
+    new BooksController().changeBook(req.params.id, req.body)
+    .then(() => res.sendStatus(204));
   }
-
-}
+})
+.delete((req, res) => {
+  new BooksController().removeBook(req.params.id)
+  .then(() => res.sendStatus(204));
+});
