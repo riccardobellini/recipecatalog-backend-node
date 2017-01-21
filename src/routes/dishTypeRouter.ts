@@ -10,8 +10,16 @@ export var dishTypeRouter : Router = Router();
 dishTypeRouter.route('/')
 .get((req, res) => {
   var parms = new PaginationParams(+req.query.offset, +req.query.limit);
-  new DishTypeController().getAllDishTypes(parms)
-  .then(function(rows) {
+  var filter : string = req.query.q || '';
+  var ctrl : DishTypeController = new DishTypeController();
+  var promise : any = {};
+  if (filter.length > 0) {
+    // FIXME throw error if length is < 3
+    promise = ctrl.searchDishTypes(filter, parms);
+  } else {
+    promise = ctrl.getAllDishTypes(parms);
+  }
+  promise.then(function(rows) {
       res.json(rows);
   });
 })

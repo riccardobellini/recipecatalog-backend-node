@@ -94,3 +94,34 @@ export function updateDishType(id: number, obj: any){
     }
 }
 
+export function searchDishTypes(key: string, parms: PaginationParams){
+    var resp = {
+        pagination : {},
+        results : []
+    };
+    let searchClause = '%' + key + '%';
+    return db(Tables.DishType.TblName).count('* as TOTAL').where(Tables.DishType.Columns.Name, 'like', searchClause).first()
+    .then((result) => {
+        let tot = result['TOTAL'];
+        let pages = Math.ceil(tot / parms.limit);
+        let more = parms.offset + parms.limit < tot;
+        resp.pagination = {
+            total : tot,
+            pageCount : pages,
+            perPage : parms.limit,
+            hasMore : more
+        };
+        return db.select().from(Tables.DishType.TblName).where(Tables.DishType.Columns.Name, 'like', searchClause).orderBy(Tables.DishType.Columns.Name, 'asc').limit(parms.limit).offset(parms.offset);
+    })
+    .then((rows) => {
+        let result : Array<DishType> = [];
+        for (let row of rows) {
+            result.push({
+                id : row[Tables.DishType.Columns.Id],
+                name : row[Tables.DishType.Columns.Name]
+            });
+        }
+        resp.results = result;
+        return resp;
+    });
+}

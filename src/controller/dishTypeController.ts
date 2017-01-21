@@ -25,4 +25,8 @@ export default class DishTypesController {
     public changeDishType(id: number, obj: any) {
         return new DishTypeWorker().changeDishType(id, obj);
     }
+
+    public searchDishTypes(key, parms) {
+        return new DishTypeWorker().searchDishTypes(key, parms);
+    }
 };
