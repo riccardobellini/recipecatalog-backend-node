@@ -31,4 +31,11 @@ export default class DishTypeWorker {
     changeDishType(id: number, obj: any) {
         return dishTypeDb.updateDishType(id, obj);
     }
+
+    searchDishTypes(key: string, parms ?: PaginationParams) {
+        if (!parms) {
+            var parms = new PaginationParams();
+        }
+        return dishTypeDb.searchDishTypes(key, parms);
+    }
 }
