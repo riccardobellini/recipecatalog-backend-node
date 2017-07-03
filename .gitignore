@@ -38,3 +38,7 @@ jspm_packages
 
 # Output directory
 dist/
+
+# NPM lock file
+package-lock.json
+
