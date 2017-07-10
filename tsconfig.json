@@ -4,10 +4,14 @@
     "module": "commonjs",
     "outDir": "dist",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*.ts"
+    // "test/**/*.test.ts"
   ],
   "exclude": [
     "node_modules"
