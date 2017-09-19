@@ -7,7 +7,7 @@ import * as Knex from 'knex';
 export default class BookWorker {
     readBooks(parms ?: PaginationParams) {
         if (!parms) {
-            var parms = new PaginationParams();
+            parms = new PaginationParams();
         }
         return bookDb.readBooks(parms);
     }
@@ -30,5 +30,12 @@ export default class BookWorker {
 
     changeBook(id: number, obj: any) {
         return bookDb.updateBook(id, obj);
+    }
+
+    searchBooks(key: string, parms ?: PaginationParams) {
+        if (!parms) {
+            parms = new PaginationParams();
+        }
+        return bookDb.searchBooks(key, parms);
     }
 }

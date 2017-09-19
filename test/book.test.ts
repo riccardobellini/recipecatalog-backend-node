@@ -64,6 +64,24 @@ describe('GET api/v1/books', () => {
       })
   });
 
+    it('should filter correctly', () => {
+      return chai.request(app).get('/api/v1/books').query({q: 'ucina', offset: 0, limit: 2})
+        .then(res => {
+            expect(res.body.results).to.have.length(2);
+            let sought = res.body.results.find(dt => dt.title === 'Cucina Italiana');
+            expect(sought).to.exist;
+            sought = res.body.results.find(dt => dt.title === 'Cucina Naturale');
+            expect(sought).to.exist;
+            expect(res.body.pagination.hasMore).to.equal(false);
+            expect(res.body.pagination.pageCount).to.equal(1);
+            expect(res.body.pagination.perPage).to.equal(2);
+            return chai.request(app).get('/api/v1/books').query({q: 'liana'})
+        })
+        .then(res => {
+            expect(res.body.results).to.have.length(1);
+            expect(res.body.pagination.hasMore).to.equal(false);
+        });
+    });
 
 });
 

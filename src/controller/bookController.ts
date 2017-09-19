@@ -25,4 +25,8 @@ export default class BooksController {
     public changeBook(id: number, obj: any) {
         return new BookWorker().changeBook(id, obj);
     }
+
+    public searchBooks(key, parms) {
+        return new BookWorker().searchBooks(key, parms);
+    }
 };

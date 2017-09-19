@@ -9,13 +9,22 @@ export var bookRouter : Router = Router();
 
 bookRouter.route('/')
 .get((req, res) => {
-  var parms = new PaginationParams(+req.query.offset, +req.query.limit);
-  new BooksController().getAllBooks(parms)
-  .then(function(rows) {
+  let parms = new PaginationParams(+req.query.offset, +req.query.limit);
+  let filter : string = req.query.q || '';
+  let ctrl: BooksController = new BooksController();
+  let promise;
+  if (filter.length > 0) {
+    // FIXME throw error if length is < 3
+    promise = ctrl.searchBooks(filter, parms);
+  } else {
+    promise = ctrl.getAllBooks(parms);
+  }
+  promise.then(function(rows) {
       res.json(rows);
   });
 })
 .post((req, res) => {
+  console.log(req.body);
   new BooksController().createBook(req.body)
   .then(function(genId) {
     res.status(201).location('/api/v1/books/' + genId).send();

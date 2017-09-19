@@ -92,3 +92,37 @@ export function updateBook(id: number, obj: any){
     }
 }
 
+export function searchBooks(key: string, parms: PaginationParams){
+    var resp = {
+        pagination : {},
+        results : []
+    };
+    let searchClause = '%' + key + '%';
+    return db(Tables.Book.TblName).count('* as TOTAL').where(Tables.Book.Columns.Title, 'like', searchClause).first()
+        .then((result) => {
+            let tot = result['TOTAL'];
+            let pages = Math.ceil(tot / parms.limit);
+            let more = parms.offset + parms.limit < tot;
+            resp.pagination = {
+                total : tot,
+                pageCount : pages,
+                perPage : parms.limit,
+                hasMore : more
+            };
+            return db.select()
+                .from(Tables.Book.TblName).where(Tables.Book.Columns.Title, 'like', searchClause)
+                .orderBy(Tables.Book.Columns.Title, 'asc')
+                .limit(parms.limit).offset(parms.offset);
+        })
+        .then((rows) => {
+            let result : Array<Book> = [];
+            for (let row of rows) {
+                result.push({
+                    id : row[Tables.Book.Columns.Id],
+                    title : row[Tables.Book.Columns.Title]
+                });
+            }
+            resp.results = result;
+            return resp;
+        });
+}
