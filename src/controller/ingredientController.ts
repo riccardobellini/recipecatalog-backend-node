@@ -25,4 +25,8 @@ export default class IngredientsController {
     public changeIngredient(id: number, obj: any) {
         return new IngredientWorker().changeIngredient(id, obj);
     }
+
+    public searchIngredients(key, parms) {
+        return new IngredientWorker().searchIngredients(key, parms);
+    }
 };

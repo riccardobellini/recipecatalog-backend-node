@@ -64,6 +64,25 @@ describe('GET api/v1/ingredients', () => {
       })
   });
 
+    it('should filter correctly', () => {
+      return chai.request(app).get('/api/v1/ingredients').query({q: 'ar', offset: 0, limit: 2})
+          .then(res => {
+              expect(res.body.results).to.have.length(2);
+              let sought = res.body.results.find(dt => dt.name === 'Carciofi');
+              expect(sought).to.exist;
+              sought = res.body.results.find(dt => dt.name === 'Asparagi');
+              expect(sought).to.exist;
+              expect(res.body.pagination.hasMore).to.equal(false);
+              expect(res.body.pagination.pageCount).to.equal(1);
+              expect(res.body.pagination.perPage).to.equal(2);
+              return chai.request(app).get('/api/v1/ingredients').query({q: 'ara'})
+          })
+          .then(res => {
+              expect(res.body.results).to.have.length(1);
+              expect(res.body.pagination.hasMore).to.equal(false);
+          })
+    });
+
 
 });
 

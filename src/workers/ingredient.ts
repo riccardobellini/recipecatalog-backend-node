@@ -31,4 +31,11 @@ export default class IngredientWorker {
     changeIngredient(id: number, obj: any) {
         return ingredientDb.updateIngredient(id, obj);
     }
+
+    searchIngredients(key: string, parms ?: PaginationParams) {
+        if (!parms) {
+            var parms = new PaginationParams();
+        }
+        return ingredientDb.searchIngredients(key, parms);
+    }
 }

@@ -9,9 +9,17 @@ export var ingredientRouter : Router = Router();
 
 ingredientRouter.route('/')
 .get((req, res) => {
-  var parms = new PaginationParams(+req.query.offset, +req.query.limit);
-  new IngredientController().getAllIngredients(parms)
-  .then(function(rows) {
+  let parms = new PaginationParams(+req.query.offset, +req.query.limit);
+  let filter: string = req.query.q || '';
+  let ctrl: IngredientController = new IngredientController();
+  var promise: any;
+  if (filter.length > 0) {
+    // FIXME throw error if length is < 3
+      promise = ctrl.searchIngredients(filter, parms);
+  } else {
+    promise = ctrl.getAllIngredients(parms);
+  }
+  promise.then(function(rows) {
       res.json(rows);
   });
 })

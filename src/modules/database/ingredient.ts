@@ -94,3 +94,34 @@ export function updateIngredient(id: number, obj: any){
     }
 }
 
+export function searchIngredients(key: string, parms: PaginationParams){
+    var resp = {
+        pagination : {},
+        results : []
+    };
+    let searchClause = '%' + key + '%';
+    return db(Tables.Ingredient.TblName).count('* as TOTAL').where(Tables.Ingredient.Columns.Name, 'like', searchClause).first()
+        .then((result) => {
+            let tot = result['TOTAL'];
+            let pages = Math.ceil(tot / parms.limit);
+            let more = parms.offset + parms.limit < tot;
+            resp.pagination = {
+                total : tot,
+                pageCount : pages,
+                perPage : parms.limit,
+                hasMore : more
+            };
+            return db.select().from(Tables.Ingredient.TblName).where(Tables.Ingredient.Columns.Name, 'like', searchClause).orderBy(Tables.Ingredient.Columns.Name, 'asc').limit(parms.limit).offset(parms.offset);
+        })
+        .then((rows) => {
+            let result : Array<Ingredient> = [];
+            for (let row of rows) {
+                result.push({
+                    id : row[Tables.Ingredient.Columns.Id],
+                    name : row[Tables.Ingredient.Columns.Name]
+                });
+            }
+            resp.results = result;
+            return resp;
+        });
+}
